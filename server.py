@@ -1,16 +1,24 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Nov  6 09:49:49 2019
+
+@author: admin
+"""
+
 import asyncio
 
 HOST = 'localhost'
-PORT = 9095
-
+PORT = int(input("Введите порт для соединения:"))
+if not 0 <= PORT <= 65535:
+    PORT = 9090
 
 async def handle_echo(reader, writer):
     data = await reader.read(100)
     message = data.decode()
-
+    print('Received {0}'.format(message))
     writer.write(data)
     await writer.drain()
-
+    print("Close the socket")
     writer.close()
 
 
@@ -29,3 +37,4 @@ except KeyboardInterrupt:
 server.close()
 loop.run_until_complete(server.wait_closed())
 loop.close()
+input()
